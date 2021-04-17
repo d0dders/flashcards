@@ -25,14 +25,26 @@ app.get('/hello', (req, res) => {
     } else {
         res.render('hello');
     }
-})
+});
 app.post('/hello', (req, res) => {
     res.cookie('username', req.body.username);
     res.redirect('/');
-})
+});
 app.post('/goodbye', (req, res) => {
     res.clearCookie('username');
     res.redirect('/hello');
-})
+});
+
+app.use((req, res, next) => {
+    const err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+app.use((err, req, res, next) => {
+    res.locals.error = err;
+    res.status(err.status);
+    res.render('error');
+});
 
 app.listen(3000, () => console.log('Application running on port 3000'));
