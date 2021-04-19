@@ -1,7 +1,14 @@
+const { signedCookie } = require('cookie-parser');
 const express = require('express');
 const router = express.Router();
 const {data} = require('../data/flashcardData.json');
 const {cards} = data;
+
+router.get('/', (req, res) => {
+    const randomID = (Math.floor(Math.random() * cards.length));
+    res.redirect(`/cards/${randomID}?side=question`);
+    //res.send(`Random ID: ${randomID}`);
+});
 
 router.get('/:id', (req, res) => {
     const {side} = req.query;
