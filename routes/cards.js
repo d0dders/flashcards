@@ -7,15 +7,16 @@ const {cards} = data;
 router.get('/', (req, res) => {
     const randomID = (Math.floor(Math.random() * cards.length));
     res.redirect(`/cards/${randomID}?side=question`);
-    //res.send(`Random ID: ${randomID}`);
 });
 
 router.get('/:id', (req, res) => {
     const {side} = req.query;
     const {id} = req.params;
+    const name = req.cookies.username;
+    if (!side){res.redirect(`/cards/${id}?side=question`)};
     const text = cards[id][side];
     const {hint} = cards[id];
-    const templateData = { id, text};
+    const templateData = { id, text, name};
     if (side === 'question'){
         templateData.hint = hint;
         templateData.sideToShow = 'answer';
